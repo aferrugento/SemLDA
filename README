@@ -20,7 +20,6 @@ A. EXPERIMENTS
 
 	4. Experiment 4 - Classifier
 
-	5. Experiment 5 - Portuguese language
 
 B. COMPILING
 
@@ -86,14 +85,6 @@ be the new probabilities of a word given a synset. The script
 experiment4.sh allows the users to see the results of this experiment, 
 with a small input.
 
-5. Experiment 5 - Portuguese language
-
-This experiment's goal is to adapt the model to the Portuguese language. 
-For the preprocessing, new tools were used and we used an equivalent to 
-the english WordNet, called the fuzzy synsets. Then we just adapted the 
-scripts to create the input for the SemLDA and the rest was the same as 
-before. The script experiment5.sh allows the users to see the results of 
-this experiment, with a small input.
 
 ------------------------------------------------------------------------
 
