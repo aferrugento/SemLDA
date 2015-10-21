@@ -1,0 +1,160 @@
+SemLDA is a variation of the Latent Dirichlet Allocation algorithm 
+(David Blei), that takes into account the semantics of the words. It 
+is also implemented in C and for further information you can read the 
+paper "Towards the Improvement of a Topic Model with Semantic Knowledge". 
+
+The fulcral point of our work was to find the best preprocessing, however
+some changes were made to the model.
+
+------------------------------------------------------------------------
+
+
+TABLE OF CONTENTS
+
+A. EXPERIMENTS
+	1. Experiment 1 - SemCor
+
+	2. Experiment 2 - WSD and SemCor
+
+	3. Experiment 3 - WSD
+
+	4. Experiment 4 - Classifier
+
+	5. Experiment 5 - Portuguese language
+
+B. COMPILING
+
+C. TOPIC ESTIMATION
+
+   1. SETTINGS FILE
+
+   2. DATA FILE FORMAT
+
+D. INFERENCE
+
+E. PRINTING TOPICS
+
+------------------------------------------------------------------------
+
+A. EXPERIMENTS
+
+Throughout this work we performed 5 main experiments. For every 
+experiment we created a script so that the users can experiment 
+our model with a sample input. To run these scripts, NLTK needs to be 
+installed, as well as WordNet corpus from this toolkit.
+
+The sample input already suffered some preprocessing, the words were 
+lemmatized and also we performed Part Of Speech tagging. After we 
+removed the existing stopwords. The data should be organized in one 
+file, where each line corresponds to a document. Each document is in 
+the following format: [word1]_[POS] [word2]_[POS] ... [wordN]_[POS].
+
+
+1. Experiment 1 - SemCor
+
+This first experiment consisted in calculating the probability of a 
+word given a synset, based on the information in SemCor, which is a 
+part of WordNet. Then, to each word were assigned its synsets and the 
+respective probabilities. Afterwards the SemLDA model is applyed, 
+producing semantic topics. The script experiment1.sh allows the users 
+to see the results of this experiment, with a small input.
+
+2. Experiment 2 - WSD and SemCor
+
+Given the results obtained in the previous experiment, we thought of 
+this one. Here we introduced a new way to calculate the probabilities 
+of a word given a synset, which was by using Word Sense Disambiguation. 
+The algorithm chosen was the Adapted Lesk. However, when this algorithm 
+didn't return anything the probabilities from SemCor were used once again. 
+The script experiment2.sh allows the users to see the results of this 
+experiment, with a small input.
+
+3. Experiment 3 - WSD
+
+The difference from this experiment to the previous is that SemCor is 
+no longer used here. The script experiment3.sh allows the users to see 
+the results of this experiment, with a small input.
+
+4. Experiment 4 - Classifier
+
+For every synset in SemCor we trained a classifier, Logistic Regression, 
+with the distribution of probabilities obtained from a run with the 
+classic LDA with the SemCor documents. Afterwards, with the distribution 
+of probabilities obtained from a run with the classic LDA with the data, 
+we predicted the values for each synset of a specific word. These will 
+be the new probabilities of a word given a synset. The script 
+experiment4.sh allows the users to see the results of this experiment, 
+with a small input.
+
+5. Experiment 5 - Portuguese language
+
+This experiment's goal is to adapt the model to the Portuguese language. 
+For the preprocessing, new tools were used and we used an equivalent to 
+the english WordNet, called the fuzzy synsets. Then we just adapted the 
+scripts to create the input for the SemLDA and the rest was the same as 
+before. The script experiment5.sh allows the users to see the results of 
+this experiment, with a small input.
+
+------------------------------------------------------------------------
+
+B. COMPILING
+
+Type "make" in a shell.
+
+
+------------------------------------------------------------------------
+
+C. TOPIC ESTIMATION
+
+Estimate the model by executing a similar instruction as in LDA:
+
+     semlda est [alpha] [k] [settings] [data] [random/seeded/*] [directory]
+
+The only difference here from our model to LDA is the format of the data. 
+The rest means exactly the same. So, for more informations read lda_readme.txt 
+in the SemLDA folder.
+
+1. Settings file
+
+The settings file was the same used in LDA.
+
+2. Data format
+
+As we said before, the format of the data is different for our model. 
+It is now a file  where each line is of the form:
+
+     [M] [term_1]:[count]:[num_synsets][[synset_1]:[prob_1] [synset_2]:[prob_2]] 
+     [term_2]:[count]:[num_synsets][[synset_1]:[prob_1]] ...  
+     [term_N]:[count]:[num_synsets][[synset_1]:[prob_1]]
+
+where [M] is the number of unique terms in the document, and the
+[count] associated with each term is how many times that term appeared
+in the document. The [num_synsets] is the number of senses that term has and next 
+inside the squared brackets are the ids of those synsets, [synset_1], and 
+respective probabilities [prob_1]. Note that [term_1] is an integer which indexes the
+term; it is not a string.
+
+
+------------------------------------------------------------------------
+
+D. INFERENCE
+
+To perform inference on a different set of data (in the same format as
+for estimation), execute the same as in LDA:
+
+     semlda inf [settings] [model] [data] [name]
+
+
+------------------------------------------------------------------------
+
+E. PRINTING TOPICS
+
+The Python script topics.py lets you print out the top N
+words from each topic in a .beta file.  Usage is:
+
+     python topics.py <beta file> <vocab file> <n words>
+
+This will create topics with synsets and to obtain a word from each synset
+there is a script in the folder for this purpose.
+
+------------------------------------------------------------------------
