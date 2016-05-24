@@ -1,7 +1,8 @@
 SemLDA is a variation of the Latent Dirichlet Allocation algorithm 
 (David Blei), that takes into account the semantics of the words. It 
 is also implemented in C and for further information you can read the 
-paper "Towards the Improvement of a Topic Model with Semantic Knowledge". 
+papers "Towards the Improvement of a Topic Model with Semantic Knowledge" and
+"Can Topic Modelling benefit from Word Sense Information?". 
 
 The fulcral point of our work was to find the best preprocessing, however
 some changes were made to the model.
